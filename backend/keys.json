@@ -1,10 +1,10 @@
 {
   "postgres":{
-      "username": "username",
+      "username": "postgres",
       "password": "password",
       "port": 5432,
       "host": "localhost",
-      "database": "db"
+      "database": "thub"
     },
   "twilio":{
       "accountSid" : "sid",
