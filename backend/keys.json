@@ -1,0 +1,19 @@
+{
+  "postgres":{
+      "username": "username",
+      "password": "password",
+      "port": 5432,
+      "host": "localhost",
+      "database": "db"
+    },
+  "twilio":{
+      "accountSid" : "sid",
+      "authToken" : "token"
+    },
+  "firebase" : {
+
+
+  }
+
+
+}
