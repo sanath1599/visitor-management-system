@@ -7,6 +7,6 @@ module.exports = function routes(app) {
 
 
   //POST routes
-  app.get('/login', require('./auth/login').login);
-  app.get('/signup', require('./auth/login').signup);
+  app.post('/login',  require('./auth/login').login);
+  app.post('/signup', require('./auth/login').signup);
 }
