@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react'
-import LoginForm from './LoginForm'; 
 import './style.css';
-import { Container, Col, Row, Image } from 'react-bootstrap'; 
-import t_hub_logo from '../../../assets/t-hub-logo.png';
+import { Container, Col, Row } from 'react-bootstrap'; 
+import t_hub_logo from '../../assets/t-hub-logo.png';
+import VisitorRequestForm from './VisitorRequestForm';
 export class Login extends Component { 
     render() {
         return ( 
@@ -15,7 +15,7 @@ export class Login extends Component {
                 </Row> 
                 <Row>
                     <Col >
-                        <LoginForm/>
+                        <VisitorRequestForm/>
                     </Col>
                 </Row>
             </Container>
