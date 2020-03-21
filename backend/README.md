@@ -1,7 +1,5 @@
 # T-Hub Visitor Management Backend
 
-]
-
 
 ## Getting started
 
