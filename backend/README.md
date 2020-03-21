@@ -68,14 +68,14 @@ npm install
 │   └── www
 ├── controllers
 │   ├── AuthController.js
-│   └── BookController.js
+│   └── VisitorController.js
 ├── models
-│   ├── BookModel.js
+│   ├── VisitorModel.js
 │   └── UserModel.js
 ├── routes
 │   ├── api.js
 │   ├── auth.js
-│   └── book.js
+│   └── Visitor.js
 ├── middlewares
 │   ├── jwt.js
 ├── helpers
@@ -86,7 +86,7 @@ npm install
 ├── test
 │   ├── testConfig.js
 │   ├── auth.js
-│   └── book.js
+│   └── Visitor.js
 └── public
     ├── index.html
     └── stylesheets
