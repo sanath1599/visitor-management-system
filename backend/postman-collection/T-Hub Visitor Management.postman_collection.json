@@ -52,12 +52,12 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/auth/register?=",
+							"raw": "http://localhost:3005/api/auth/register?=",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "3000",
+							"port": "3005",
 							"path": [
 								"api",
 								"auth",
@@ -101,12 +101,12 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/auth/login",
+							"raw": "http://localhost:3005/api/auth/login",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "3000",
+							"port": "3005",
 							"path": [
 								"api",
 								"auth",
@@ -144,12 +144,12 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/auth/verify-otp",
+							"raw": "http://localhost:3005/api/auth/verify-otp",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "3000",
+							"port": "3005",
 							"path": [
 								"api",
 								"auth",
@@ -182,12 +182,12 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/auth/resend-verify-otp",
+							"raw": "http://localhost:3005/api/auth/resend-verify-otp",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "3000",
+							"port": "3005",
 							"path": [
 								"api",
 								"auth",
@@ -252,12 +252,12 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/visitor",
+							"raw": "http://localhost:3005/api/visitor",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "3000",
+							"port": "3005",
 							"path": [
 								"api",
 								"visitor"
@@ -278,12 +278,12 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/api/visitor",
+							"raw": "http://localhost:3005/api/visitor",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "3000",
+							"port": "3005",
 							"path": [
 								"api",
 								"book"
@@ -304,12 +304,12 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/api/visitor/5d43d14a246036209713e667",
+							"raw": "http://localhost:3005/api/visitor/5d43d14a246036209713e667",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "3000",
+							"port": "3005",
 							"path": [
 								"api",
 								"book",
@@ -359,12 +359,12 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/visitor/5d43d753cdbdd1264291806c",
+							"raw": "http://localhost:3005/api/visitor/5d43d753cdbdd1264291806c",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "3000",
+							"port": "3005",
 							"path": [
 								"api",
 								"book",
@@ -386,12 +386,12 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/api/visitor/5d43d753cdbdd1264291806c",
+							"raw": "http://localhost:3005/api/visitor/5d43d753cdbdd1264291806c",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "3000",
+							"port": "3005",
 							"path": [
 								"api",
 								"book",
