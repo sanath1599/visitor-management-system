@@ -1,0 +1,409 @@
+{
+	"info": {
+		"_postman_id": "0f568059-e040-4d0a-9bee-19b349ebf42d",
+		"name": "T-Hub Visitor Management",
+		"description": "A boilerplate for REST API Development with Node.js and Expressjs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "firstName",
+									"value": "Sanath",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "Swaroop",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "sanath15swaroop@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "startup",
+									"value": "BuildUp",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/register?=",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "sanath15swaroop@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Confirm OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "sanath15swaroop@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "otp",
+									"value": "6442",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/verify-otp",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"verify-otp"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Resend Confirm OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "sanath15swaroop@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/resend-verify-otp",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"resend-verify-otp"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Visitor",
+			"item": [
+				{
+					"name": "Add Visitor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "visitor",
+									"value": "Kunal",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "My friend Sanath",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "8790682297",
+									"type": "text"
+								},
+								{
+									"key": "contact",
+									"value": "sanath15swaroop@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "time",
+									"value": "3",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/visitor",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"visitor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Visitor List",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDQwMzc0ODllY2I2ZDUyNjAzZDQ1ZjMiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0aW5nIiwiZW1haWwiOiJ0ZXN0QHRlc3RpbmcuY29tIiwiaWF0IjoxNTY0NzQ0NzQ4LCJleHAiOjE1NjQ3NTE5NDh9.gE2DjhWgNmPFyy7K21MEC4bIm3gbbDicdE_eorFIZ0o",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/book",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"book"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Visitor Detail",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDQwMzc0ODllY2I2ZDUyNjAzZDQ1ZjMiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0aW5nIiwiZW1haWwiOiJ0ZXN0QHRlc3RpbmcuY29tIiwiaWF0IjoxNTY0NzQ0NzQ4LCJleHAiOjE1NjQ3NTE5NDh9.gE2DjhWgNmPFyy7K21MEC4bIm3gbbDicdE_eorFIZ0o",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/book/5d43d14a246036209713e667",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"book",
+								"5d43d14a246036209713e667"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Visitor Update Status",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDQwMzc0ODllY2I2ZDUyNjAzZDQ1ZjMiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0aW5nIiwiZW1haWwiOiJ0ZXN0QHRlc3RpbmcuY29tIiwiaWF0IjoxNTY0OTkzMDgwLCJleHAiOjE1NjUwMDAyODB9.Lm0-ociCVNxhL7rnzeCO9i1mmJx1bZRQEJoPCNaHkIA"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "status",
+									"value": "Approved",
+									"type": "text"
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/book/5d43d753cdbdd1264291806c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"book",
+								"5d43d753cdbdd1264291806c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Visitor Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDQwMzc0ODllY2I2ZDUyNjAzZDQ1ZjMiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0aW5nIiwiZW1haWwiOiJ0ZXN0QHRlc3RpbmcuY29tIiwiaWF0IjoxNTY1MDAxNzQ3LCJleHAiOjE1NjUwMDg5NDd9.NFq5JjFI4nEU7_1oAt2Zj91q0vRSdd3d5to-T_7aRJ4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/book/5d43d753cdbdd1264291806c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"book",
+								"5d43d753cdbdd1264291806c"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

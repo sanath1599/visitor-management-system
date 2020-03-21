@@ -1,4 +1,5 @@
-const Visitor = require("../models/UserModel");
+/* eslint-disable no-unused-vars */
+const Visitor = require("../models/VisitorModel");
 const { body,validationResult } = require("express-validator");
 const { sanitizeBody } = require("express-validator");
 const apiResponse = require("../helpers/apiResponse");
@@ -7,14 +8,13 @@ var mongoose = require("mongoose");
 mongoose.set("useFindAndModify", false);
 
 // Visitor Schema
-class visitorData {
-	constructor(data) {
-		this.visitor = data.visitor;
-		this.time = data.time;
-		this.description = data.description;
-		this.phone = data.phone;
-		this.createdAt = data.createdAt;
-	}
+function VisitorData(data) {
+	this.visitorName = data.visitor;
+	this.time = data.time;
+	this.description = data.description;
+	this.phone = data.phone;
+	this.createdAt = data.createdAt;
+	
 }
 
 /**
@@ -22,13 +22,12 @@ class visitorData {
  * 
  * @returns {Object}
  */
-exports.VisitorList = [
-	auth,
+exports.visitorList = [auth,	
 	function (req, res) {
 		try {
-			Visitor.find({contact: req.user._id},"_id title description isbn createdAt").then((Visitors)=>{
-				if(Visitors.length > 0){
-					return apiResponse.successResponseWithData(res, "Operation success", Visitors);
+			Visitor.find({contact: req.user.email},"List for your user").then((visitors)=>{
+				if(visitors.length > 0){
+					return apiResponse.successResponseWithData(res, "Operation success", visitors);
 				}else{
 					return apiResponse.successResponseWithData(res, "Operation success", []);
 				}
@@ -47,17 +46,17 @@ exports.VisitorList = [
  * 
  * @returns {Object}
  */
-exports.VisitorDetail = [
+exports.visitorDetail = [
 	auth,
 	function (req, res) {
 		if(!mongoose.Types.ObjectId.isValid(req.params.id)){
 			return apiResponse.successResponseWithData(res, "Operation success", {});
 		}
 		try {
-			Visitor.findOne({phone: req.params.phone},"_id title description isbn createdAt").then((Visitor)=>{                
-				if(Visitor !== null){
-					let VisitorData = new visitorData(Visitor);
-					return apiResponse.successResponseWithData(res, "Operation success", VisitorData);
+			Visitor.findOne({_id: req.params.id , contact: req.user.email},"details for a visitor").then((visitor)=>{                
+				if(visitor !== null){
+					let visitorData = new VisitorData(visitor);
+					return apiResponse.successResponseWithData(res, "Operation success", visitorData);
 				}else{
 					return apiResponse.successResponseWithData(res, "Operation success", {});
 				}
@@ -80,37 +79,43 @@ exports.VisitorDetail = [
  * 
  * @returns {Object}
  */
-exports.VisitorStore = [
-	auth,
-	body("title", "Title must not be empty.").isLength({ min: 1 }).trim(),
+exports.visitorStore = [
+	body("visitor", "Title must not be empty.").isLength({ min: 1 }).trim(),
 	body("description", "Description must not be empty.").isLength({ min: 1 }).trim(),
-	body("isbn", "ISBN must not be empty").isLength({ min: 1 }).trim().custom((value,{req}) => {
-		return Visitor.findOne({isbn : value,user: req.user._id}).then(Visitor => {
+	body("time", "time must not be empty.").isLength({ min: 1 }).trim(),
+	body("contact", "Contact must not be empty.").isLength({ min: 1 }).trim(),
+	body("phone", "phone must not be empty").isLength({ min: 1 }).trim().custom((value,{req}) => {
+		return Visitor.findOne({phone : value, contact : req.user.email}).then(Visitor => {
 			if (Visitor) {
-				return Promise.reject("Visitor already exist with this ISBN no.");
+				return Promise.reject("Visitor already exists");
 			}
 		});
 	}),
 	sanitizeBody("*").escape(),
 	(req, res) => {
 		try {
+			
 			const errors = validationResult(req);
-			var Visitor = new Visitor(
-				{ title: req.body.title,
-					user: req.user,
+			var visitor = new Visitor(
+				{ 	
+					visitorName: req.body.visitor,
+					time: req.body.time,
+					contact: req.body.contact,
 					description: req.body.description,
-					isbn: req.body.isbn
+					phone: req.body.phone
 				});
-
+			console.log("Validated Data");
 			if (!errors.isEmpty()) {
 				return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
 			}
 			else {
 				//Save Visitor.
-				Visitor.save(function (err) {
+				
+				visitor.save(function (err) {
 					if (err) { return apiResponse.ErrorResponse(res, err); }
-					let VisitorData = new visitorData(Visitor);
-					return apiResponse.successResponseWithData(res,"Visitor add Success.", VisitorData);
+					let visitorData = new VisitorData(visitor);
+					
+					return apiResponse.successResponseWithData(res,"Visitor add Success.", visitorData);
 				});
 			}
 		} catch (err) {
@@ -119,26 +124,36 @@ exports.VisitorStore = [
 		}
 	}
 ];
-
+//update extra data
+// visitor: req.body.visitor,
+// time: req.body.time,
+// contact: req.body.contact,
+// description: req.body.description,
+// phone: req.body.phone,
+//extra data ends
 /**
  * Visitor update.
  * 
- * @param {string}      visitor 
- * @param {string}      description
- * @param {number}      phone
- * @param {string} 		contact
- * @param {string}		time
+//  * @param {string}      visitor 
+//  * @param {string}      description
+//  * @param {number}      phone
+//  * @param {string} 		contact
+//  * @param {string}		time
+ * @param {string}		status
  * 
  * @returns {Object}
  */
-exports.VisitorUpdate = [
+exports.visitorUpdate = [
 	auth,
-	body("title", "Title must not be empty.").isLength({ min: 1 }).trim(),
+	body("visitor", "Title must not be empty.").isLength({ min: 1 }).trim(),
 	body("description", "Description must not be empty.").isLength({ min: 1 }).trim(),
-	body("isbn", "ISBN must not be empty").isLength({ min: 1 }).trim().custom((value,{req}) => {
-		return Visitor.findOne({isbn : value,user: req.user._id, _id: { "$ne": req.params.id }}).then(Visitor => {
-			if (Visitor) {
-				return Promise.reject("Visitor already exist with this ISBN no.");
+	body("time", "time must not be empty.").isLength({ min: 1 }).trim(),
+	body("contact", "Contact must not be empty.").isLength({ min: 1 }).trim(),
+	body("status", "status must not be empty.").isLength({ min: 1 }).trim(),
+	body("phone", "phone must not be empty").isLength({ min: 1 }).trim().custom((value,{req}) => {
+		return Visitor.findOne({phone : value,contact: req.user.phone}).then(Visitor => {
+			if (!Visitor) {
+				return Promise.reject("Visitor does not exist.");
 			}
 		});
 	}),
@@ -147,10 +162,8 @@ exports.VisitorUpdate = [
 		try {
 			const errors = validationResult(req);
 			var Visitor = new Visitor(
-				{ title: req.body.title,
-					description: req.body.description,
-					isbn: req.body.isbn,
-					_id:req.params.id
+				{ 
+					status: req.body.status
 				});
 
 			if (!errors.isEmpty()) {
@@ -165,7 +178,7 @@ exports.VisitorUpdate = [
 							return apiResponse.notFoundResponse(res,"Visitor not exists with this id");
 						}else{
 							//Check authorized user
-							if(foundVisitor.user.toString() !== req.user._id){
+							if(foundVisitor.contact.toString() !== req.user.email){
 								return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
 							}else{
 								//update Visitor.
@@ -173,8 +186,8 @@ exports.VisitorUpdate = [
 									if (err) { 
 										return apiResponse.ErrorResponse(res, err); 
 									}else{
-										let VisitorData = new visitorData(Visitor);
-										return apiResponse.successResponseWithData(res,"Visitor update Success.", VisitorData);
+										let visitorData = new VisitorData(Visitor);
+										return apiResponse.successResponseWithData(res,"Visitor update Success.", visitorData);
 									}
 								});
 							}
@@ -196,7 +209,7 @@ exports.VisitorUpdate = [
  * 
  * @returns {Object}
  */
-exports.VisitorDelete = [
+exports.visitorDelete = [
 	auth,
 	function (req, res) {
 		if(!mongoose.Types.ObjectId.isValid(req.params.id)){
@@ -208,7 +221,7 @@ exports.VisitorDelete = [
 					return apiResponse.notFoundResponse(res,"Visitor not exists with this id");
 				}else{
 					//Check authorized user
-					if(foundVisitor.user.toString() !== req.user._id){
+					if(foundVisitor.contact.toString() !== req.user.email){
 						return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
 					}else{
 						//delete Visitor.

@@ -1,43 +1,51 @@
+// eslint-disable-next-line no-unused-vars
 const { chai, server, should } = require("./testConfig");
-const BookModel = require("../models/BookModel");
+const VisitorModel = require("../models/VisitorModel");
 
 /**
- * Test cases to test all the book APIs
+ * Test cases to test all the Visitor APIs
  * Covered Routes:
  * (1) Login
- * (2) Store book
- * (3) Get all books
- * (4) Get single book
- * (5) Update book
- * (6) Delete book
+ * (2) Add Visitor
+ * (3) Get all Visitors
+ * (4) Get single Visitor
+ * (5) Update Visitor
+ * (6) Delete Visitor
  */
 
-describe("Book", () => {
+describe("Visitor", () => {
 	//Before each test we empty the database
 	before((done) => { 
-		BookModel.deleteMany({}, (err) => { 
+		// eslint-disable-next-line no-unused-vars
+		VisitorModel.deleteMany({}, (err) => { 
 			done();           
 		});        
 	});
 
 	// Prepare data for testing
 	const userTestData = {
-		"password":"Test@123",
-		"email":"maitraysuthar@test12345.com"
+		"password":"password",
+		"email":"testing@gmail.com"
 	};
 
 	// Prepare data for testing
 	const testData = {
-		"title":"testing book",
-		"description":"testing book desc",
-		"isbn":"3214htrff4"
+		"visitor":"Kunal",
+		"description":"My friend Sanath",
+		"phone":"8790682297",
+		"contact":"sanath15swaroop@gmail.com",
+		"time":3
+	};
+
+	const testDataUpdated = {
+		"status" : "Approved"
 	};
 
 	/*
   * Test the /POST route
   */
 	describe("/POST Login", () => {
-		it("it should do user Login for book", (done) => {
+		it("it should do user Login for Visitor", (done) => {
 			chai.request(server)
 				.post("/api/auth/login")
 				.send({"email": userTestData.email,"password": userTestData.password})
@@ -53,10 +61,10 @@ describe("Book", () => {
 	/*
   * Test the /POST route
   */
-	describe("/POST Book Store", () => {
-		it("It should send validation error for store book", (done) => {
+	describe("/POST Visitor Add", () => {
+		it("It should send validation error for store Visitor", (done) => {
 			chai.request(server)
-				.post("/api/book")
+				.post("/api/visitor")
 				.send()
 				.set("Authorization", "Bearer "+ userTestData.token)
 				.end((err, res) => {
@@ -69,15 +77,15 @@ describe("Book", () => {
 	/*
   * Test the /POST route
   */
-	describe("/POST Book Store", () => {
-		it("It should store book", (done) => {
+	describe("/POST Visitor Store", () => {
+		it("It should store Visitor", (done) => {
 			chai.request(server)
-				.post("/api/book")
+				.post("/api/visitor")
 				.send(testData)
 				.set("Authorization", "Bearer "+ userTestData.token)
 				.end((err, res) => {
 					res.should.have.status(200);
-					res.body.should.have.property("message").eql("Book add Success.");
+					res.body.should.have.property("message").eql("Visitor add Success.");
 					done();
 				});
 		});
@@ -86,10 +94,10 @@ describe("Book", () => {
 	/*
   * Test the /GET route
   */
-	describe("/GET All book", () => {
-		it("it should GET all the books", (done) => {
+	describe("/GET All Visitor", () => {
+		it("it should GET all the Visitors", (done) => {
 			chai.request(server)
-				.get("/api/book")
+				.get("/api/Visitor")
 				.set("Authorization", "Bearer "+ userTestData.token)
 				.end((err, res) => {
 					res.should.have.status(200);
@@ -103,10 +111,10 @@ describe("Book", () => {
 	/*
   * Test the /GET/:id route
   */
-	describe("/GET/:id book", () => {
-		it("it should GET the books", (done) => {
+	describe("/GET/:id Visitor", () => {
+		it("it should GET the Visitors", (done) => {
 			chai.request(server)
-				.get("/api/book/"+testData._id)
+				.get("/api/Visitor/"+testData._id)
 				.set("Authorization", "Bearer "+ userTestData.token)
 				.end((err, res) => {
 					res.should.have.status(200);
@@ -119,15 +127,15 @@ describe("Book", () => {
 	/*
   * Test the /PUT/:id route
   */
-	describe("/PUT/:id book", () => {
-		it("it should PUT the books", (done) => {
+	describe("/PUT/:id Visitor", () => {
+		it("it should PUT the Visitors", (done) => {
 			chai.request(server)
-				.put("/api/book/"+testData._id)
-				.send(testData)
+				.put("/api/Visitor/"+testData._id)
+				.send(testDataUpdated)
 				.set("Authorization", "Bearer "+ userTestData.token)
 				.end((err, res) => {
 					res.should.have.status(200);
-					res.body.should.have.property("message").eql("Book update Success.");
+					res.body.should.have.property("message").eql("Visitor update Success.");
 					done();
 				});
 		});
@@ -136,14 +144,14 @@ describe("Book", () => {
 	/*
   * Test the /DELETE/:id route
   */
-	describe("/DELETE/:id book", () => {
-		it("it should DELETE the books", (done) => {
+	describe("/DELETE/:id Visitor", () => {
+		it("it should DELETE the Visitors", (done) => {
 			chai.request(server)
-				.delete("/api/book/"+testData._id)
+				.delete("/api/Visitor/"+testData._id)
 				.set("Authorization", "Bearer "+ userTestData.token)
 				.end((err, res) => {
 					res.should.have.status(200);
-					res.body.should.have.property("message").eql("Book delete Success.");
+					res.body.should.have.property("message").eql("Visitor delete Success.");
 					done();
 				});
 		});

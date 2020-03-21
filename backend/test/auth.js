@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const { chai, server, should } = require("./testConfig");
 const UserModel = require("../models/UserModel");
 
@@ -21,10 +22,10 @@ describe("Auth", () => {
 
 	// Prepare data for testing
 	const testData = {
-		"firstName":"test",
-		"lastName":"testing",
-		"password":"Test@123",
-		"email":"maitraysuthar@test12345.com"
+		"firstName":"Sanath",
+		"lastName":"Swaroop",
+		"password":"password",
+		"email":"testing@gmail.com"
 	};
 
 	/*

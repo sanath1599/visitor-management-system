@@ -26,7 +26,7 @@ exports.register = [
 	body("lastName").isLength({ min: 1 }).trim().withMessage("Last name must be specified.")
 		.isAlphanumeric().withMessage("Last name has non-alphanumeric characters."),
 	body("startup").isLength({ min: 1 }).trim().withMessage("startup must be specified.")
-	.isAlphanumeric().withMessage("startup has non-alphanumeric characters."),
+		.isAlphanumeric().withMessage("startup has non-alphanumeric characters."),
 	body("email").isLength({ min: 1 }).trim().withMessage("Email must be specified.")
 		.isEmail().withMessage("Email must be a valid email address.").custom((value) => {
 			return UserModel.findOne({email : value}).then((user) => {
@@ -64,6 +64,7 @@ exports.register = [
 							password: hash,
 							confirmOTP: otp,
 							startup: req.body.startup,
+							phone: req.body.phone
 						}
 					);
 					// Html email body
@@ -82,7 +83,9 @@ exports.register = [
 								_id: user._id,
 								firstName: user.firstName,
 								lastName: user.lastName,
-								email: user.email
+								email: user.email,
+								startup: req.body.startup,
+								phone: req.body.phone
 							};
 							return apiResponse.successResponseWithData(res,"Registration Success.", userData);
 						});
