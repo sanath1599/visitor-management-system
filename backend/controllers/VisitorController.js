@@ -9,12 +9,13 @@ mongoose.set("useFindAndModify", false);
 
 // Visitor Schema
 function VisitorData(data) {
-	this.visitorName = data.visitor;
+	this.visitorName = data.visitorName;
 	this.time = data.time;
 	this.description = data.description;
 	this.phone = data.phone;
-	this.createdAt = data.createdAt;
-	
+	this.contact = data.contact;
+	this.status = data.status;
+	this.createdAt = data.createdAt;	
 }
 
 /**
@@ -53,7 +54,7 @@ exports.visitorDetail = [
 			return apiResponse.successResponseWithData(res, "Operation success", {});
 		}
 		try {
-			Visitor.findOne({_id: req.params.id , contact: req.user.email},"details for a visitor").then((visitor)=>{                
+			Visitor.findOne({_id: req.params.id , contact: req.user.email},"_id visitorName description phone contact status time").then((visitor)=>{                
 				if(visitor !== null){
 					let visitorData = new VisitorData(visitor);
 					return apiResponse.successResponseWithData(res, "Operation success", visitorData);
@@ -85,7 +86,7 @@ exports.visitorStore = [
 	body("time", "time must not be empty.").isLength({ min: 1 }).trim(),
 	body("contact", "Contact must not be empty.").isLength({ min: 1 }).trim(),
 	body("phone", "phone must not be empty").isLength({ min: 1 }).trim().custom((value,{req}) => {
-		return Visitor.findOne({phone : value, contact : req.user.email}).then(Visitor => {
+		return Visitor.findOne({phone : value}).then(Visitor => {
 			if (Visitor) {
 				return Promise.reject("Visitor already exists");
 			}
@@ -145,13 +146,13 @@ exports.visitorStore = [
  */
 exports.visitorUpdate = [
 	auth,
-	body("visitor", "Title must not be empty.").isLength({ min: 1 }).trim(),
-	body("description", "Description must not be empty.").isLength({ min: 1 }).trim(),
-	body("time", "time must not be empty.").isLength({ min: 1 }).trim(),
-	body("contact", "Contact must not be empty.").isLength({ min: 1 }).trim(),
-	body("status", "status must not be empty.").isLength({ min: 1 }).trim(),
-	body("phone", "phone must not be empty").isLength({ min: 1 }).trim().custom((value,{req}) => {
-		return Visitor.findOne({phone : value,contact: req.user.phone}).then(Visitor => {
+	// body("visitor", "Title must not be empty.").isLength({ min: 1 }).trim(),
+	// body("description", "Description must not be empty.").isLength({ min: 1 }).trim(),
+	// body("time", "time must not be empty.").isLength({ min: 1 }).trim(),
+	// body("contact", "Contact must not be empty.").isLength({ min: 1 }).trim(),
+	// body("status", "status must not be empty.").isLength({ min: 1 }).trim(),
+	body("status", "phone must not be empty").isLength({ min: 1 }).trim().custom((value,{req}) => {
+		return Visitor.findOne({_id : req.params.id,contact: req.user.email}).then(Visitor => {
 			if (!Visitor) {
 				return Promise.reject("Visitor does not exist.");
 			}
@@ -159,12 +160,13 @@ exports.visitorUpdate = [
 	}),
 	sanitizeBody("*").escape(),
 	(req, res) => {
+		console.log("Visitor found");
 		try {
 			const errors = validationResult(req);
-			var Visitor = new Visitor(
-				{ 
-					status: req.body.status
-				});
+			// var visitor = new Visitor(
+			// 	{ 
+			// 		status: req.body.status
+			// 	});
 
 			if (!errors.isEmpty()) {
 				return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
@@ -182,12 +184,12 @@ exports.visitorUpdate = [
 								return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
 							}else{
 								//update Visitor.
-								Visitor.findByIdAndUpdate(req.params.id, Visitor, {},function (err) {
+								Visitor.findByIdAndUpdate(req.params.id, { $set: { status: req.body.status }}, {},function (err) {
 									if (err) { 
 										return apiResponse.ErrorResponse(res, err); 
 									}else{
-										let visitorData = new VisitorData(Visitor);
-										return apiResponse.successResponseWithData(res,"Visitor update Success.", visitorData);
+										// let visitorData = new VisitorData(visitor);
+										return apiResponse.successResponseWithData(res,"Visitor update Success.", "visitorData");
 									}
 								});
 							}

@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "0f568059-e040-4d0a-9bee-19b349ebf42d",
 		"name": "T-Hub Visitor Management",
-		"description": "A boilerplate for REST API Development with Node.js and Expressjs",
+		"description": "T-hub Visitor Management System Backend",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
