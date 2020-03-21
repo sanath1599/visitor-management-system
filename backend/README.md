@@ -75,7 +75,7 @@ npm install
 ├── routes
 │   ├── api.js
 │   ├── auth.js
-│   └── Visitor.js
+│   └── visitor.js
 ├── middlewares
 │   ├── jwt.js
 ├── helpers
@@ -86,7 +86,7 @@ npm install
 ├── test
 │   ├── testConfig.js
 │   ├── auth.js
-│   └── Visitor.js
+│   └── visitor.js
 └── public
     ├── index.html
     └── stylesheets
