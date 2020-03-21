@@ -46,7 +46,7 @@
 								},
 								{
 									"key": "startup",
-									"value": "BuildUp",
+									"value": "coding.Studio();",
 									"type": "text"
 								}
 							]
@@ -278,7 +278,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/api/book",
+							"raw": "http://localhost:3000/api/visitor",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -304,7 +304,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/api/book/5d43d14a246036209713e667",
+							"raw": "http://localhost:3000/api/visitor/5d43d14a246036209713e667",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -359,7 +359,7 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/book/5d43d753cdbdd1264291806c",
+							"raw": "http://localhost:3000/api/visitor/5d43d753cdbdd1264291806c",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -386,7 +386,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/api/book/5d43d753cdbdd1264291806c",
+							"raw": "http://localhost:3000/api/visitor/5d43d753cdbdd1264291806c",
 							"protocol": "http",
 							"host": [
 								"localhost"
