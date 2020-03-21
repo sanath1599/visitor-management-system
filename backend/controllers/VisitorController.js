@@ -6,6 +6,9 @@ const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
 var mongoose = require("mongoose");
 mongoose.set("useFindAndModify", false);
+//helpers
+const mailer = require("../helpers/mailer");
+const { constants } = require("../helpers/constants");
 
 // Visitor Schema
 function VisitorData(data) {
@@ -111,13 +114,22 @@ exports.visitorStore = [
 			}
 			else {
 				//Save Visitor.
-				
-				visitor.save(function (err) {
-					if (err) { return apiResponse.ErrorResponse(res, err); }
-					let visitorData = new VisitorData(visitor);
+				// Html email body
+				let html = "<img src='https://upload.wikimedia.org/wikipedia/commons/4/40/T-Hub_Logo-PNG.png' /><br/> <p>You have received a new request from  "+req.body.visitorName+"<br/> phone number: "+req.body.phone+"<br/>for: "+req.body.description+" open the portal to approve or reject</p>";
+
+				// Send new visitor email
+				mailer.send(
+					constants.confirmEmails.from, 
+					req.body.email,
+					"new request",
+					html
+				).then(
+					visitor.save(function (err) {
+						if (err) { return apiResponse.ErrorResponse(res, err); }
+						let visitorData = new VisitorData(visitor);
 					
-					return apiResponse.successResponseWithData(res,"Visitor add Success.", visitorData);
-				});
+						return apiResponse.successResponseWithData(res,"Visitor add Success.", visitorData);
+					}));
 			}
 		} catch (err) {
 			//throw error in json response with status 500. 
@@ -184,14 +196,22 @@ exports.visitorUpdate = [
 								return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
 							}else{
 								//update Visitor.
-								Visitor.findByIdAndUpdate(req.params.id, { $set: { status: req.body.status }}, {},function (err) {
-									if (err) { 
-										return apiResponse.ErrorResponse(res, err); 
-									}else{
+								// Send new visitor email
+								let html="<img src='https://upload.wikimedia.org/wikipedia/commons/4/40/T-Hub_Logo-PNG.png' /><br/>Dear "+foundVisitor.visitorName+"<br/>Your request has been: "+req.body.status;
+								mailer.send(
+									constants.confirmEmails.from, 
+									req.body.email,
+									"new request",
+									html
+								).then(
+									Visitor.findByIdAndUpdate(req.params.id, { $set: { status: req.body.status }}, {},function (err) {
+										if (err) { 
+											return apiResponse.ErrorResponse(res, err); 
+										}else{
 										// let visitorData = new VisitorData(visitor);
-										return apiResponse.successResponseWithData(res,"Visitor update Success.", "visitorData");
-									}
-								});
+											return apiResponse.successResponseWithData(res,"Visitor update Success.", "visitorData");
+										}
+									}));
 							}
 						}
 					});
