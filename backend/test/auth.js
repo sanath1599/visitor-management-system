@@ -25,7 +25,9 @@ describe("Auth", () => {
 		"firstName":"Sanath",
 		"lastName":"Swaroop",
 		"password":"password",
-		"email":"testing@gmail.com"
+		"email":"testing@gmail.com",
+		"phone":"9392848111",
+		"startup":"coding.Studio();"
 	};
 
 	/*
