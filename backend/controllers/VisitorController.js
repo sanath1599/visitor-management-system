@@ -19,6 +19,7 @@ function VisitorData(data) {
 	this.contact = data.contact;
 	this.status = data.status;
 	this.createdAt = data.createdAt;	
+	this.email = data.email;
 }
 
 /**
@@ -88,6 +89,8 @@ exports.visitorStore = [
 	body("description", "Description must not be empty.").isLength({ min: 1 }).trim(),
 	body("time", "time must not be empty.").isLength({ min: 1 }).trim(),
 	body("contact", "Contact must not be empty.").isLength({ min: 1 }).trim(),
+	body("email").isLength({ min: 1 }).trim().withMessage("Email must be specified.")
+		.isEmail().withMessage("Email must be a valid email address."),
 	body("phone", "phone must not be empty").isLength({ min: 1 }).trim().custom((value,{req}) => {
 		return Visitor.findOne({phone : value}).then(Visitor => {
 			if (Visitor) {
@@ -106,7 +109,8 @@ exports.visitorStore = [
 					time: req.body.time,
 					contact: req.body.contact,
 					description: req.body.description,
-					phone: req.body.phone
+					phone: req.body.phone,
+					email: req.body.email
 				});
 			console.log("Validated Data");
 			if (!errors.isEmpty()) {
@@ -115,12 +119,12 @@ exports.visitorStore = [
 			else {
 				//Save Visitor.
 				// Html email body
-				let html = "<img src='https://upload.wikimedia.org/wikipedia/commons/4/40/T-Hub_Logo-PNG.png' /><br/> <p>You have received a new request from  "+req.body.visitorName+"<br/> phone number: "+req.body.phone+"<br/>for: "+req.body.description+" open the portal to approve or reject</p>";
+				let html = "<img width=400 src='https://upload.wikimedia.org/wikipedia/commons/4/40/T-Hub_Logo-PNG.png' /><br/> <p>You have received a new request from  "+req.body.visitor+"<br/> phone number: "+req.body.phone+"<br/>for: "+req.body.description+"<br/> open the portal to approve or reject</p>";
 
 				// Send new visitor email
 				mailer.send(
-					constants.confirmEmails.from, 
-					req.body.email,
+					constants.admin.email, 
+					req.body.contact,
 					"new request",
 					html
 				).then(
@@ -197,11 +201,11 @@ exports.visitorUpdate = [
 							}else{
 								//update Visitor.
 								// Send new visitor email
-								let html="<img src='https://upload.wikimedia.org/wikipedia/commons/4/40/T-Hub_Logo-PNG.png' /><br/>Dear "+foundVisitor.visitorName+"<br/>Your request has been: "+req.body.status;
+								let html="<img width=400 src='https://upload.wikimedia.org/wikipedia/commons/4/40/T-Hub_Logo-PNG.png' /><br/>Dear "+foundVisitor.visitorName+"<br/>Your request has been: "+req.body.status;
 								mailer.send(
-									constants.confirmEmails.from, 
-									req.body.email,
-									"new request",
+									constants.admin.email, 
+									foundVisitor.email,
+									"Update in status",
 									html
 								).then(
 									Visitor.findByIdAndUpdate(req.params.id, { $set: { status: req.body.status }}, {},function (err) {

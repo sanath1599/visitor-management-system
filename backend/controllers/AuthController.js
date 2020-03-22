@@ -25,8 +25,7 @@ exports.register = [
 		.isAlphanumeric().withMessage("First name has non-alphanumeric characters."),
 	body("lastName").isLength({ min: 1 }).trim().withMessage("Last name must be specified.")
 		.isAlphanumeric().withMessage("Last name has non-alphanumeric characters."),
-	body("startup").isLength({ min: 1 }).trim().withMessage("startup must be specified.")
-		.isAlphanumeric().withMessage("startup has non-alphanumeric characters."),
+	body("startup").isLength({ min: 1 }).trim().withMessage("startup must be specified."),
 	body("email").isLength({ min: 1 }).trim().withMessage("Email must be specified.")
 		.isEmail().withMessage("Email must be a valid email address.").custom((value) => {
 			return UserModel.findOne({email : value}).then((user) => {
@@ -68,7 +67,13 @@ exports.register = [
 						}
 					);
 					// Html email body
-					let html = "<p>Please Confirm your Account.</p><p>OTP: "+otp+"</p>";
+					let html = "<img width=400 src='https://upload.wikimedia.org/wikipedia/commons/4/40/T-Hub_Logo-PNG.png' /> <p>Please Confirm your Account.</p><p>OTP: "+otp+"</p>";
+
+
+
+
+
+
 					// Send confirmation email
 					mailer.send(
 						constants.confirmEmails.from, 

@@ -5,6 +5,7 @@ var Schema = mongoose.Schema;
 var VisitorSchema = new Schema({
 	visitorName: {type: String, required: true},
 	description: {type: String, required: true},
+	email: {type:String, required: true},
 	time: {type: String, required: true},
 	phone: {type: Number, required: true},
 	contact: {type: String, required: true},

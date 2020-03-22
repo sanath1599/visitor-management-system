@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "0f568059-e040-4d0a-9bee-19b349ebf42d",
+		"_postman_id": "4febbde8-266b-4f21-b92b-ee9695cbd19d",
 		"name": "T-Hub Visitor Management",
 		"description": "T-hub Visitor Management System Backend",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -47,6 +47,11 @@
 								{
 									"key": "startup",
 									"value": "coding.Studio();",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "9392848111",
 									"type": "text"
 								}
 							]
@@ -248,6 +253,11 @@
 									"key": "time",
 									"value": "3",
 									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "gmail@sanathswaroop.com",
+									"type": "text"
 								}
 							]
 						},
@@ -286,7 +296,7 @@
 							"port": "3005",
 							"path": [
 								"api",
-								"book"
+								"visitor"
 							]
 						}
 					},
@@ -312,7 +322,7 @@
 							"port": "3005",
 							"path": [
 								"api",
-								"book",
+								"visitor",
 								"5d43d14a246036209713e667"
 							]
 						}
@@ -367,7 +377,7 @@
 							"port": "3005",
 							"path": [
 								"api",
-								"book",
+								"visitor",
 								"5d43d753cdbdd1264291806c"
 							]
 						}
@@ -394,7 +404,7 @@
 							"port": "3005",
 							"path": [
 								"api",
-								"book",
+								"visitor",
 								"5d43d753cdbdd1264291806c"
 							]
 						}
