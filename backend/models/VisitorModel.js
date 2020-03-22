@@ -8,7 +8,7 @@ var VisitorSchema = new Schema({
 	email: {type:String, required: true},
 	time: {type: String, required: true},
 	phone: {type: Number, required: true},
-	contact: {type: String, required: true},
+	startup_email: {type: String, required: true},
 	user: { type: Schema.ObjectId, ref: "User", required: false },
 	status: { type: String, required: false, default:"Applied"}
 }, {timestamps: true});
