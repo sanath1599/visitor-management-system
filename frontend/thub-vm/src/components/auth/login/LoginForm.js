@@ -83,7 +83,7 @@ export class LoginForm extends Component {
             if(!this.state.isLoggedIn){  
                 return( 
                     <div> 
-                    <Card style={{ width: '18rem' }}>
+                    <Card style={{ width: '35rem', maxWidth:'600px' }}>
                         <Card.Body>
                             <Card.Title>Login</Card.Title>
                             <Form>
@@ -118,7 +118,7 @@ export class LoginForm extends Component {
                     <Alert variant = "danger" className="alert-dialog-style" >  
                         Something went wrong! Please try again later.
                     </Alert>
-                        }
+                    }
                 </div>
                 ); 
             } 

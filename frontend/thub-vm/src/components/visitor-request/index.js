@@ -14,7 +14,7 @@ export class Login extends Component {
                     
                 </Row> 
                 <Row>
-                    <Col >
+                    <Col xs="6" >
                         <VisitorRequestForm/>
                     </Col>
                 </Row>
