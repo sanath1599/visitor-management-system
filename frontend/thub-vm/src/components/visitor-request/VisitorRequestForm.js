@@ -7,34 +7,32 @@ import axios from 'axios';
 const SERVER_URL = 'http://localhost:3000/newvisitor'
 
 const formValidationSchema = Yup.object({
-    name: Yup.string()
-        .required()
-        .min(3, "Please enter your full name"),
-    mobileNumber: Yup.string()
+    visitor: Yup.string().required()
+                .min(3, "Please enter your full name"),
+    phone: Yup.string()
         .matches(
         /^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/,
         "Please enter your 10 digit mobile number "
         )
         .required(),
-    email: Yup.string()
-        .email()
-        .required(),
+    startup_email: Yup.string().email().required(),
     startupName: Yup.string().required(),
     contactPerson: Yup.string().required(),
-    reason: Yup.string().required(),
-    duration: Yup.number().required()
+    description: Yup.string().required(),
+    time: Yup.number().required(),
+    email:Yup.string().email().required()
 });
 
 export default function VisitorRequestForm() {
     const formik = useFormik({
         initialValues: {
-            name: "",
-            mobileNumber: "",
-            email: "",
+            visitor: "",
+            phone: "",
+            startup_email: "",
             startupName: "",
             contactPerson: "",
-            reason: "",
-            duration: "",
+            description: "",
+            time: "",
             errorOccured: "",
             validationError: "",
             validationMessage: ""
@@ -56,50 +54,50 @@ export default function VisitorRequestForm() {
                 <Form.Control
                     type="text"
                     required
-                    name="name"
+                    name="visitor"
                     placeholder="Enter Name"
-                    value={formik.values.name}
+                    value={formik.values.visitor}
                     onChange={formik.handleChange}
-                    isInvalid={!!formik.errors.name}
-                    isValid={formik.touched.name && !formik.errors.name}
+                    isInvalid={!!formik.errors.visitor}
+                    isValid={formik.touched.visitor && !formik.errors.visitor}
                 />
                 <Form.Control.Feedback></Form.Control.Feedback>
                 <Form.Control.Feedback type="invalid">
-                    {formik.errors.name}
+                    {formik.errors.visitor}
                 </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group controlId="formBasicMobileNumber">
                 <Form.Control
                     type="numeric"
                     required
-                    name="mobileNumber"
+                    name="phone"
                     placeholder="Enter Mobile Number"
-                    value={formik.values.mobileNumber}
+                    value={formik.values.phone}
                     onChange={formik.handleChange}
-                    isInvalid={!!formik.errors.mobileNumber}
+                    isInvalid={!!formik.errors.phone}
                     isValid={
-                    formik.touched.mobileNumber && !formik.errors.mobileNumber
+                    formik.touched.phone && !formik.errors.phone
                     }
                 />
                 <Form.Control.Feedback></Form.Control.Feedback>
                 <Form.Control.Feedback type="invalid">
-                    {formik.errors.mobileNumber}
+                    {formik.errors.phone}
                 </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="formBasicEmail">
+                <Form.Group controlId="formBasicStartUpEmail">
                 <Form.Control
-                    type="email"
+                    type="startup_email"
                     required
-                    name="email"
-                    placeholder="Enter Email"
-                    value={formik.values.email}
+                    name="startup_email"
+                    placeholder="Enter Startup Email"
+                    value={formik.values.startup_email}
                     onChange={formik.handleChange}
-                    isInvalid={!!formik.errors.email}
-                    isValid={formik.touched.email && !formik.errors.email}
+                    isInvalid={!!formik.errors.startup_email}
+                    isValid={formik.touched.startup_email && !formik.errors.startup_email}
                 />
                 <Form.Control.Feedback></Form.Control.Feedback>
                 <Form.Control.Feedback type="invalid">
-                    {formik.errors.email}
+                    {formik.errors.startup_email}
                 </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group controlId="formBasicStartUpName">
@@ -142,32 +140,48 @@ export default function VisitorRequestForm() {
                 <Form.Control
                     type="text"
                     required
-                    name="reason"
+                    name="description"
                     placeholder="Enter Reason For Visit"
-                    value={formik.values.reason}
+                    value={formik.values.description}
                     onChange={formik.handleChange}
-                    isInvalid={!!formik.errors.reason}
-                    isValid={formik.touched.reason && !formik.errors.reason}
+                    isInvalid={!!formik.errors.description}
+                    isValid={formik.touched.description && !formik.errors.description}
                 />
                 <Form.Control.Feedback></Form.Control.Feedback>
                 <Form.Control.Feedback type="invalid">
-                    {formik.errors.reason}
+                    {formik.errors.description}
                 </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group controlId="formBasicDurationForVisit">
                 <Form.Control
                     type="text"
                     required
-                    name="duration"
+                    name="time"
                     placeholder="Enter Duration of Visit"
-                    value={formik.values.duration}
+                    value={formik.values.time}
                     onChange={formik.handleChange}
-                    isInvalid={!!formik.errors.duration}
-                    isValid={formik.touched.duration && !formik.errors.duration}
+                    isInvalid={!!formik.errors.time}
+                    isValid={formik.touched.time && !formik.errors.time}
                 />
                 <Form.Control.Feedback></Form.Control.Feedback>
                 <Form.Control.Feedback type="invalid">
-                    {formik.errors.duration}
+                    {formik.errors.time}
+                </Form.Control.Feedback>
+                </Form.Group> 
+                <Form.Group controlId="formBasicEmail">
+                <Form.Control
+                    type="text"
+                    required
+                    name="email"
+                    placeholder="Enter your Email"
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                    isInvalid={!!formik.errors.email}
+                    isValid={formik.touched.email && !formik.errors.email}
+                />
+                <Form.Control.Feedback></Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                    {formik.errors.email}
                 </Form.Control.Feedback>
                 </Form.Group>
                 <Button type="submit">Submit</Button>
