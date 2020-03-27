@@ -3,7 +3,7 @@ import './style.css';
 import { Container, Col, Row } from 'react-bootstrap'; 
 import t_hub_logo from '../../assets/t-hub-logo.png';
 import VisitorRequestForm from './VisitorRequestForm';
-export class Login extends Component { 
+export class VisitorForm extends Component { 
     render() {
         return ( 
             <Container className="login-form-layout"> 
@@ -11,7 +11,6 @@ export class Login extends Component {
                     <Col>  
                     <img src={t_hub_logo} alt="t_hub_logo" className="logo-style"/>
                     </Col>
-                    
                 </Row> 
                 <Row>
                     <Col xs="6" >
@@ -24,4 +23,4 @@ export class Login extends Component {
     }
 }
 
-export default Login;
+export default VisitorForm;

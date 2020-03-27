@@ -1,14 +1,29 @@
-import React from 'react';
-import VisitorRequestComponent from './components/visitor-request';  
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React from 'react'; 
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'; 
+import { Login } from './components/auth/login'
+import VisitorForm from './components/VisitorForm';  
+import 'bootstrap/dist/css/bootstrap.min.css';   
+import { urls } from './helpers/routes/urls';
 import './App.css'; 
-import VisitorForm from './components/formik-test/VisitorForm';
+
 
 function App() {
-  return (
-    <div className="App">
-      <VisitorRequestComponent/> 
-    </div>
+  return ( 
+    <Router>   
+      <Switch>
+        <Route path={urls.LOGIN_URL}> 
+            <Login/>
+        </Route> 
+        <Route path={urls.VISITOR_URL}>
+              <VisitorForm/>
+        </Route> 
+        <Route path="/">
+            <VisitorForm/>
+        </Route>
+      </Switch>
+    </Router> 
+
+    
   );
 }
 

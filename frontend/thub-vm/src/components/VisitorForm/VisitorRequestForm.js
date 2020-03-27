@@ -48,7 +48,7 @@ export default function VisitorRequestForm() {
         <div>
         <Card style={{ width: "35rem", maxWidth: "600px" }}>
             <Card.Body>
-            <Card.Title>Visitor Form</Card.Title>
+            <Card.Title className="text-center">Visitor Form</Card.Title>
             <Form noValidate onSubmit={formik.handleSubmit}>
                 <Form.Group controlId="formBasicName">
                 <Form.Control
@@ -183,8 +183,10 @@ export default function VisitorRequestForm() {
                 <Form.Control.Feedback type="invalid">
                     {formik.errors.email}
                 </Form.Control.Feedback>
-                </Form.Group>
+                </Form.Group> 
+                <div className="text-center">  
                 <Button type="submit">Submit</Button>
+                </div>
             </Form>
             </Card.Body>
         </Card>
