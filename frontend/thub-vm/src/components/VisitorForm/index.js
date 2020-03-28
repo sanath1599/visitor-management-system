@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react'
-import LoginForm from './LoginForm'; 
 import './style.css';
-import { Container, Col, Row, Image } from 'react-bootstrap'; 
-import t_hub_logo from '../../../assets/t-hub-logo.png';
-export class Login extends Component { 
+import { Container, Col, Row } from 'react-bootstrap'; 
+import t_hub_logo from '../../assets/t-hub-logo.png';
+import VisitorRequestForm from './VisitorRequestForm';
+export class VisitorForm extends Component { 
     render() {
         return ( 
             <Container className="login-form-layout"> 
@@ -11,11 +11,10 @@ export class Login extends Component {
                     <Col>  
                     <img src={t_hub_logo} alt="t_hub_logo" className="logo-style"/>
                     </Col>
-                    
                 </Row> 
                 <Row>
-                    <Col >
-                        <LoginForm/>
+                    <Col xs="6" >
+                        <VisitorRequestForm/>
                     </Col>
                 </Row>
             </Container>
@@ -24,4 +23,4 @@ export class Login extends Component {
     }
 }
 
-export default Login;
+export default VisitorForm;
