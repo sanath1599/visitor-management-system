@@ -63,7 +63,19 @@ export class LoginForm extends Component {
                 })
         return false; 
         } 
-    }
+    } 
+    loginAndSaveToken = (response) => { 
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem(
+        'user',
+        JSON.stringify({
+            id: response.data._id,
+            firstName: response.data.firstName,
+            lastName: response.data.lastName,
+            startup: response.data.startup
+        }),
+        );
+    }   
     onFormSubmit = () =>{   
         if(this.formValidation()){ 
             const response = { 
@@ -74,7 +86,7 @@ export class LoginForm extends Component {
             } 
             console.log(response);
             axios.post(`${SERVER_URL}`,response) 
-            .then(res => this.setState({isLoggedIn:true})) 
+            .then(res => this.loginAndSaveToken(res)) 
             .catch(err=> this.setState({errorOccured:true}))
             console.log("Submit clicked");
         }
