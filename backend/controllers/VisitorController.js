@@ -162,7 +162,7 @@ exports.visitorStore = [
 			} else {
 				//Save Visitor.
 				// Html email body
-				let html = mail_template.new_visitor_mail(req.body.visitor,req.body.phone,req.body.description,req.body.startup,req.body.time);
+				let html = mail_template.new_visitor_mail(req.body.visitor,req.body.phone,req.body.description,req.body.startup,req.body.email,req.body.time);
 				//   "<img width=400 src='https://upload.wikimedia.org/wikipedia/commons/4/40/T-Hub_Logo-PNG.png' /><br/> <p>You have received a new request from  " +
 				//   req.body.visitor +
 				//   "<br/> phone number: " +
