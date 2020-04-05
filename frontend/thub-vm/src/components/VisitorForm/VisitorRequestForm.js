@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState} from "react";
 import { Form, Button, Card } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup"; 
@@ -19,11 +19,13 @@ const formValidationSchema = Yup.object({
     startupName: Yup.string().required(),
     contactPerson: Yup.string().required(),
     description: Yup.string().required(),
-    time: Yup.number().required(),
+    time: Yup.number().required("Enter single digit number of hours of visit time"),
     email:Yup.string().email().required()
 });
 
-export default function VisitorRequestForm() {
+export default function VisitorRequestForm() { 
+    const [validated, setvalidated] = useState(false)
+
     const formik = useFormik({
         initialValues: {
             visitor: "",
@@ -32,24 +34,23 @@ export default function VisitorRequestForm() {
             startupName: "",
             contactPerson: "",
             description: "",
-            time: "",
+            time: "", 
+            email:"",
             errorOccured: "",
             validationError: "",
             validationMessage: ""
         }, 
         validationSchema: () => formValidationSchema,
-        onSubmit: values => {
+        onSubmit: values => {  
             axios.post(SERVER_URL,values);
         }
     }); 
-
-    console.log(formik.errors);
     return (
         <div>
         <Card style={{ width: "35rem", maxWidth: "600px" }}>
             <Card.Body>
             <Card.Title className="text-center">Visitor Form</Card.Title>
-            <Form noValidate onSubmit={formik.handleSubmit}>
+            <Form noValidate  onSubmit={formik.handleSubmit}>
                 <Form.Group controlId="formBasicName">
                 <Form.Control
                     type="text"
@@ -58,13 +59,14 @@ export default function VisitorRequestForm() {
                     placeholder="Enter Name"
                     value={formik.values.visitor}
                     onChange={formik.handleChange}
-                    isInvalid={!!formik.errors.visitor}
-                    isValid={formik.touched.visitor && !formik.errors.visitor}
-                />
-                <Form.Control.Feedback></Form.Control.Feedback>
-                <Form.Control.Feedback type="invalid">
+                    isInvalid={ validated && !!formik.errors.visitor}
+                    isValid={  validated && formik.touched.visitor && !formik.errors.visitor}
+                /> 
+                <Form.Control.Feedback type="valid"></Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">
                     {formik.errors.visitor}
-                </Form.Control.Feedback>
+                    </Form.Control.Feedback> 
+                
                 </Form.Group>
                 <Form.Group controlId="formBasicMobileNumber">
                 <Form.Control
@@ -74,9 +76,9 @@ export default function VisitorRequestForm() {
                     placeholder="Enter Mobile Number"
                     value={formik.values.phone}
                     onChange={formik.handleChange}
-                    isInvalid={!!formik.errors.phone}
+                    isInvalid={validated && !!formik.errors.phone}
                     isValid={
-                    formik.touched.phone && !formik.errors.phone
+                        validated && formik.touched.phone && !formik.errors.phone
                     }
                 />
                 <Form.Control.Feedback></Form.Control.Feedback>
@@ -92,8 +94,8 @@ export default function VisitorRequestForm() {
                     placeholder="Enter Startup Email"
                     value={formik.values.startup_email}
                     onChange={formik.handleChange}
-                    isInvalid={!!formik.errors.startup_email}
-                    isValid={formik.touched.startup_email && !formik.errors.startup_email}
+                    isInvalid={ validated && !!formik.errors.startup_email}
+                    isValid={ validated && formik.touched.startup_email && !formik.errors.startup_email}
                 />
                 <Form.Control.Feedback></Form.Control.Feedback>
                 <Form.Control.Feedback type="invalid">
@@ -108,9 +110,9 @@ export default function VisitorRequestForm() {
                     placeholder="Enter Startup Name"
                     value={formik.values.startupName}
                     onChange={formik.handleChange}
-                    isInvalid={!!formik.errors.startupName}
+                    isInvalid={ validated && !!formik.errors.startupName}
                     isValid={
-                    !formik.errors.startupName && formik.touched.startupName
+                        validated &&  !formik.errors.startupName && formik.touched.startupName
                     }
                 />
                 <Form.Control.Feedback></Form.Control.Feedback>
@@ -126,9 +128,9 @@ export default function VisitorRequestForm() {
                     placeholder="Contact Person at Startup"
                     value={formik.values.contactPerson}
                     onChange={formik.handleChange}
-                    isInvalid={!!formik.errors.contactPerson}
+                    isInvalid={ validated && !!formik.errors.contactPerson}
                     isValid={
-                    formik.touched.contactPerson && !formik.errors.contactPerson
+                        validated && formik.touched.contactPerson && !formik.errors.contactPerson
                     }
                 />
                 <Form.Control.Feedback></Form.Control.Feedback>
@@ -144,8 +146,8 @@ export default function VisitorRequestForm() {
                     placeholder="Enter Reason For Visit"
                     value={formik.values.description}
                     onChange={formik.handleChange}
-                    isInvalid={!!formik.errors.description}
-                    isValid={formik.touched.description && !formik.errors.description}
+                    isInvalid={ validated && !!formik.errors.description}
+                    isValid={validated && formik.touched.description && !formik.errors.description}
                 />
                 <Form.Control.Feedback></Form.Control.Feedback>
                 <Form.Control.Feedback type="invalid">
@@ -160,8 +162,8 @@ export default function VisitorRequestForm() {
                     placeholder="Enter Duration of Visit"
                     value={formik.values.time}
                     onChange={formik.handleChange}
-                    isInvalid={!!formik.errors.time}
-                    isValid={formik.touched.time && !formik.errors.time}
+                    isInvalid={ validated && !!formik.errors.time}
+                    isValid={ validated && formik.touched.time && !formik.errors.time}
                 />
                 <Form.Control.Feedback></Form.Control.Feedback>
                 <Form.Control.Feedback type="invalid">
@@ -170,14 +172,14 @@ export default function VisitorRequestForm() {
                 </Form.Group> 
                 <Form.Group controlId="formBasicEmail">
                 <Form.Control
-                    type="text"
+                    type="email"
                     required
                     name="email"
                     placeholder="Enter your Email"
                     value={formik.values.email}
                     onChange={formik.handleChange}
-                    isInvalid={!!formik.errors.email}
-                    isValid={formik.touched.email && !formik.errors.email}
+                    isInvalid={validated && !!formik.errors.email}
+                    isValid={validated && formik.touched.email && !formik.errors.email}
                 />
                 <Form.Control.Feedback></Form.Control.Feedback>
                 <Form.Control.Feedback type="invalid">
@@ -185,7 +187,7 @@ export default function VisitorRequestForm() {
                 </Form.Control.Feedback>
                 </Form.Group> 
                 <div className="text-center">  
-                <Button type="submit">Submit</Button>
+                <Button type="submit" onClick={()=>setvalidated(true)} >Submit</Button>
                 </div>
             </Form>
             </Card.Body>
