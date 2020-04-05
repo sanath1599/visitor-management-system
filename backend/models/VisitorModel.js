@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 var mongoose = require("mongoose");
 
 var Schema = mongoose.Schema;
@@ -9,6 +10,7 @@ var VisitorSchema = new Schema({
 	time: {type: String, required: true},
 	phone: {type: Number, required: true},
 	startup_email: {type: String, required: true},
+	startup: {type: String, required: true},
 	user: { type: Schema.ObjectId, ref: "User", required: false },
 	status: { type: String, required: false, default:"Applied"}
 }, {timestamps: true});

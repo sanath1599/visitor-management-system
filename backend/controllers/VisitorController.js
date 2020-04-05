@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable linebreak-style */
 const Visitor = require("../models/VisitorModel");
 const { body, validationResult } = require("express-validator");
 const { sanitizeBody } = require("express-validator");
@@ -9,7 +9,7 @@ mongoose.set("useFindAndModify", false);
 //helpers
 const mailer = require("../helpers/mailer");
 const { constants } = require("../helpers/constants");
-
+var mail_template = require("../helpers/mailtemplates");
 // Visitor Schema
 function VisitorData(data) {
 	this.visitorName = data.visitorName;
@@ -120,6 +120,9 @@ exports.visitorStore = [
 	body("startup_email", "startup_email must not be empty.")
 		.isLength({ min: 1 })
 		.trim(),
+	body("startup", "startup_email must not be empty.")
+		.isLength({ min: 1 })
+		.trim(),	
 	body("email")
 		.isLength({ min: 1 })
 		.trim()
@@ -132,7 +135,7 @@ exports.visitorStore = [
 		.custom((value, { req }) => {
 			return Visitor.findOne({ phone: value }).then(Visitor => {
 				if (Visitor) {
-					return Promise.reject("Visitor already exists");
+					return Promise.reject("Visitor already exists" + req.body.email);
 				}
 			});
 		}),
@@ -146,7 +149,8 @@ exports.visitorStore = [
 				startup_email: req.body.startup_email,
 				description: req.body.description,
 				phone: req.body.phone,
-				email: req.body.email
+				email: req.body.email,
+				startup:req.body.startup
 			});
 			console.log("Validated Data");
 			if (!errors.isEmpty()) {
@@ -158,19 +162,20 @@ exports.visitorStore = [
 			} else {
 				//Save Visitor.
 				// Html email body
-				let html =
-          "<img width=400 src='https://upload.wikimedia.org/wikipedia/commons/4/40/T-Hub_Logo-PNG.png' /><br/> <p>You have received a new request from  " +
-          req.body.visitor +
-          "<br/> phone number: " +
-          req.body.phone +
-          "<br/>for: " +
-          req.body.description +
-          "<br/> open the portal to approve or reject</p>";
+				let html = mail_template.new_visitor_mail(req.body.visitor,req.body.phone,req.body.description,req.body.startup,req.body.time);
+				//   "<img width=400 src='https://upload.wikimedia.org/wikipedia/commons/4/40/T-Hub_Logo-PNG.png' /><br/> <p>You have received a new request from  " +
+				//   req.body.visitor +
+				//   "<br/> phone number: " +
+				//   req.body.phone +
+				//   "<br/>for: " +
+				//   req.body.description +
+				//   "<br/> open the portal to approve or reject</p>";
 
 				// Send new visitor email
 				mailer
-					.send(constants.admin.email, req.body.startup_email, "new request", html)
+					.send(constants.admin.email, req.body.email, "Your Request has been Placed", html)
 					.then(
+						
 						visitor.save(function(err) {
 							if (err) {
 								return apiResponse.ErrorResponse(res, err);
@@ -182,7 +187,16 @@ exports.visitorStore = [
 								"Visitor add Success.",
 								visitorData
 							);
+							
 						})
+						
+							
+					);
+				let html2 = mail_template.visitor_confirmation(req.body.visitor,req.body.phone,req.body.description,req.body.email,req.body.startup,req.body.startup_email);
+				mailer
+					.send(constants.admin.email, req.body.startup_email, "new request", html2)
+					.then(
+						console.log("Mail sent to visitor")
 					);
 			}
 		} catch (err) {
@@ -270,11 +284,11 @@ exports.visitorUpdate = [
 							} else {
 								//update Visitor.
 								// Send new visitor email
-								let html =
-                  "<img width=400 src='https://upload.wikimedia.org/wikipedia/commons/4/40/T-Hub_Logo-PNG.png' /><br/>Dear " +
-                  foundVisitor.visitorName +
-                  "<br/>Your request has been: " +
-                  req.body.status;
+								let html = mail_template.visitor_update(foundVisitor.name, foundVisitor.phone, foundVisitor.description,foundVisitor.startup,foundVisitor.startup_email);
+								//   "<img width=400 src='https://upload.wikimedia.org/wikipedia/commons/4/40/T-Hub_Logo-PNG.png' /><br/>Dear " +
+								//   foundVisitor.visitorName +
+								//   "<br/>Your request has been: " +
+								//   req.body.status;
 								mailer
 									.send(
 										constants.admin.email,
