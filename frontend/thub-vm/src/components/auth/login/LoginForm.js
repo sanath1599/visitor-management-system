@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { Form, Button, Card, Alert } from 'react-bootstrap'; 
 import axios from 'axios'; 
 
-const SERVER_URL = "http://localhost:3000/login" 
+const SERVER_URL = process.env.REACT_APP_DEV_API_URL + "/auth/login" 
 const CODE_MAX_VALUE = 9999;
 const CODE_MIN_VALUE = 1000; 
 const USERNAME_MIN_LENGTH = 4; 
-const PASSWORD_MIN_LENGTH =  8;
+const PASSWORD_MIN_LENGTH =  6;
 
 export class LoginForm extends Component { 
     constructor(props){ 
@@ -67,7 +67,7 @@ export class LoginForm extends Component {
     onFormSubmit = () =>{   
         if(this.formValidation()){ 
             const response = { 
-                username : this.state.username, 
+                email : this.state.username, 
                 password : this.state.password, 
                 code : this.generateSecretCode(), 
                 status : this.state.status, 
