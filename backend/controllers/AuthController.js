@@ -68,12 +68,6 @@ exports.register = [
 					);
 					// Html email body
 					let html = "<img width=400 src='https://upload.wikimedia.org/wikipedia/commons/4/40/T-Hub_Logo-PNG.png' /> <p>Please Confirm your Account.</p><p>OTP: "+otp+"</p>";
-
-
-
-
-
-
 					// Send confirmation email
 					mailer.send(
 						constants.confirmEmails.from, 

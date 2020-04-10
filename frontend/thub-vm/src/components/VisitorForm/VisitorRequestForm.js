@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup"; 
 import axios from 'axios';
 
-const SERVER_URL = 'http://localhost:3000/newvisitor'
+const SERVER_URL = 'http://localhost:3005/api/auth/login';
 
 const formValidationSchema = Yup.object({
     visitor: Yup.string().required()

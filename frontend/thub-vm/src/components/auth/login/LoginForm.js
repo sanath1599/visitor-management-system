@@ -1,18 +1,24 @@
 import React, { Component } from 'react'; 
-import { Form, Button, Card, Alert } from 'react-bootstrap'; 
+import { Form, Button, Card, Alert, FormControl } from 'react-bootstrap';  
+import * as Yup from 'yup';
 import axios from 'axios'; 
+import { Redirect } from 'react-router-dom';
 
-const SERVER_URL = "http://localhost:3000/login" 
+const SERVER_URL = "http://localhost:3005/api/auth/login" 
 const CODE_MAX_VALUE = 9999;
 const CODE_MIN_VALUE = 1000; 
-const USERNAME_MIN_LENGTH = 4; 
-const PASSWORD_MIN_LENGTH =  8;
+const PASSWORD_MIN_LENGTH =  8; 
+
+const schema = Yup.object().shape({ 
+    email : Yup.string().email("Enter Proper Email").required("Email is Required"), 
+    password : Yup.string().required("Password is required")
+})
 
 export class LoginForm extends Component { 
     constructor(props){ 
         super(props); 
         this.state={ 
-            username:'', 
+            email:'', 
             password:'', 
             resp : null, 
             status : 'rejected', 
@@ -20,12 +26,13 @@ export class LoginForm extends Component {
             isLoggedIn:false, 
             errorOccured : false, 
             validationError :  false, 
-            validationMessage : ''
+            validationMessage : '', 
+            userId : null
         }
     } 
     onUserNameEntered = (event) =>{ 
         this.setState({ 
-            username:event.target.value
+            email:event.target.value
         })
     } 
     onPasswordEnterd = (event) => { 
@@ -39,58 +46,53 @@ export class LoginForm extends Component {
         return Math.floor(Math.random() * (max - min)) + min; 
     } 
     formValidation = () => {
-        if(this.state.username.length > USERNAME_MIN_LENGTH){ 
-            console.log("Username satisfied");
-            if(this.state.password.length > PASSWORD_MIN_LENGTH){ 
-                console.log("password satisfied"); 
-                this.setState({  
-                    validationError: false,  
-                    validationMessage : ''
-                    })
-                return true;
-            } 
-            else{   
-                this.setState({  
-                    validationError: true,  
-                    validationMessage : 'Username or Password Incorrect'
-                    })
-                    return false; 
-            }
-        }else { 
-            this.setState({  
-                validationError: true,  
-                validationMessage : 'Username or Password Incorrect'
-                })
-        return false; 
-        } 
+        schema.isValid({ 
+            email:this.state.email, 
+            password:this.state.password
+        }).then((valid)=>{  
+            if(valid)
+            return true; 
+            else 
+            return false;
+        }).catch((err)=>{ 
+            this.setState({ 
+                validationError:true, 
+                validationMessage:'Enter proper email and password'
+            }) 
+            return false;
+        })
+    }
+
+    saveToken = (response) => {  
+        localStorage.setItem('token', response.data.token); 
+        this.updateStateWithUserdId(response);
     } 
-    loginAndSaveToken = (response) => { 
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem(
-        'user',
-        JSON.stringify({
-            id: response.data._id,
-            firstName: response.data.firstName,
-            lastName: response.data.lastName,
-            startup: response.data.startup
-        }),
-        );
+    updateStateWithUserdId = (response ) => {
+        this.setState({ 
+            userId : response.data._id
+        })
     }   
-    onFormSubmit = () =>{   
-        if(this.formValidation()){ 
+    onFormSubmit = () =>{     
+        console.log("Button Clicked");
+        if(this.formValidation()){  
             const response = { 
-                username : this.state.username, 
+                email : this.state.email, 
                 password : this.state.password, 
                 code : this.generateSecretCode(), 
                 status : this.state.status, 
             } 
-            console.log(response);
             axios.post(`${SERVER_URL}`,response) 
-            .then(res => this.loginAndSaveToken(res)) 
+            .then(res => this.saveToken(res.data)) 
+            .then(<Redirect
+                        to={{
+                            pathname: "/dashboard",
+                            state: { userId : this.state.userId }
+                        }}
+                    />)
             .catch(err=> this.setState({errorOccured:true}))
             console.log("Submit clicked");
         }
-    } 
+    }
     render() {
             if(!this.state.isLoggedIn){  
                 return( 
@@ -103,10 +105,11 @@ export class LoginForm extends Component {
                                     <Form.Control  
                                         type="email"  
                                         placeholder="Enter email"  
-                                        value = {this.state.username}  
+                                        value = {this.state.email}  
                                         onChange = {(e)=> this.onUserNameEntered(e)}  
-                                    />
-                                </Form.Group>
+                                    /> 
+                                    <FormControl.Feedback type="invalid">Enter Proper Email</FormControl.Feedback>
+                                </Form.Group> 
                                 <Form.Group controlId="formBasicPassword">
                                     <Form.Control  
                                         type="password"  
@@ -142,7 +145,7 @@ export class LoginForm extends Component {
                 )
             } 
 
-    }
+    } 
 }
 
-export default LoginForm
+export default LoginForm;

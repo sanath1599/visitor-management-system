@@ -5,6 +5,7 @@ import VisitorForm from './components/VisitorForm';
 import 'bootstrap/dist/css/bootstrap.min.css';   
 import { urls } from './helpers/routes/urls';
 import './App.css'; 
+import Dashboard from './components/Dashboard';
 
 
 function App() {
@@ -16,6 +17,9 @@ function App() {
         </Route> 
         <Route path={urls.VISITOR_URL}>
               <VisitorForm/>
+        </Route> 
+        <Route exact path={urls.DASHBOARD}>
+              <Dashboard/>
         </Route> 
         <Route path="/">
             <VisitorForm/>
