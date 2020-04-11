@@ -27,7 +27,8 @@ export class LoginForm extends Component {
             errorOccured : false, 
             validationError :  false, 
             validationMessage : '', 
-            userId : null
+            userId : null, 
+            redirect:false
         }
     } 
     onUserNameEntered = (event) =>{ 
@@ -45,22 +46,35 @@ export class LoginForm extends Component {
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min)) + min; 
     } 
-    formValidation = () => {
+    formValidation = () => { 
+        let isSchemaValid = false;
         schema.isValid({ 
             email:this.state.email, 
             password:this.state.password
-        }).then((valid)=>{  
-            if(valid)
-            return true; 
+        }).then((valid)=>{   
+            console.log("Schema is valid", valid);
+            if(valid){ 
+                const response = { 
+                    email : this.state.email, 
+                    password : this.state.password, 
+                    code : this.generateSecretCode(), 
+                    status : this.state.status, 
+                } 
+                axios.post(`${SERVER_URL}`,response) 
+                .then(res => this.saveToken(res.data)) 
+                .then(this.setState({ redirect : true }))
+                .catch(err=> this.setState({errorOccured:true}))
+            }
             else 
-            return false;
+            isSchemaValid = false;
         }).catch((err)=>{ 
             this.setState({ 
                 validationError:true, 
                 validationMessage:'Enter proper email and password'
             }) 
             return false;
-        })
+        }) 
+        return isSchemaValid;
     }
 
     saveToken = (response) => {  
@@ -73,27 +87,20 @@ export class LoginForm extends Component {
         })
     }   
     onFormSubmit = () =>{     
-        console.log("Button Clicked");
-        if(this.formValidation()){  
-            const response = { 
-                email : this.state.email, 
-                password : this.state.password, 
-                code : this.generateSecretCode(), 
-                status : this.state.status, 
-            } 
-            axios.post(`${SERVER_URL}`,response) 
-            .then(res => this.saveToken(res.data)) 
-            .then(<Redirect
-                        to={{
-                            pathname: "/dashboard",
-                            state: { userId : this.state.userId }
-                        }}
-                    />)
-            .catch(err=> this.setState({errorOccured:true}))
-            console.log("Submit clicked");
-        }
+        console.log("Button Clicked"); 
+        this.formValidation();
     }
-    render() {
+    render() { 
+            if(this.state.redirect){  
+                return(
+                <Redirect
+                            to={{
+                                pathname: "/dashboard",
+                                state: { userId : this.state.userId }
+                            }}
+                        /> 
+                )
+            }else { 
             if(!this.state.isLoggedIn){  
                 return( 
                     <div> 
@@ -143,7 +150,8 @@ export class LoginForm extends Component {
                     Successfully LoggedIn
                 </Alert>
                 )
-            } 
+            }  
+        }
 
     } 
 }
