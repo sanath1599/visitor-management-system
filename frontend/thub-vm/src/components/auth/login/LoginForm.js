@@ -7,7 +7,6 @@ import { Redirect } from 'react-router-dom';
 const SERVER_URL = "http://localhost:3005/api/auth/login" 
 const CODE_MAX_VALUE = 9999;
 const CODE_MIN_VALUE = 1000; 
-const PASSWORD_MIN_LENGTH =  8; 
 
 const schema = Yup.object().shape({ 
     email : Yup.string().email("Enter Proper Email").required("Email is Required"), 
@@ -45,14 +44,14 @@ export class LoginForm extends Component {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min)) + min; 
-    } 
+    }  
+
     formValidation = () => { 
-        let isSchemaValid = false;
+        
         schema.isValid({ 
             email:this.state.email, 
             password:this.state.password
         }).then((valid)=>{   
-            console.log("Schema is valid", valid);
             if(valid){ 
                 const response = { 
                     email : this.state.email, 
@@ -62,11 +61,21 @@ export class LoginForm extends Component {
                 } 
                 axios.post(`${SERVER_URL}`,response) 
                 .then(res => this.saveToken(res.data)) 
-                .then(this.setState({ redirect : true }))
-                .catch(err=> this.setState({errorOccured:true}))
+                .then(resp=>{console.log(resp); this.setState({ redirect : true })}) //add additional check here based on the response received from the server
+                .catch(err=> {  
+                        if(!err.response)
+                        this.setState({errorOccured:true})  
+                        else 
+                        this.setState({validationError:true, 
+                                        validationMessage: 'Email or Password incorrect'})
+                    
+                    })
+            }else { 
+                this.setState({ 
+                    validationError:true, 
+                    validationMessage:'Enter proper email and password'
+                }) 
             }
-            else 
-            isSchemaValid = false;
         }).catch((err)=>{ 
             this.setState({ 
                 validationError:true, 
@@ -74,12 +83,13 @@ export class LoginForm extends Component {
             }) 
             return false;
         }) 
-        return isSchemaValid;
-    }
+}
 
-    saveToken = (response) => {  
+    saveToken = (response) => {   
+        console.log(!!response.data.token);
         localStorage.setItem('token', response.data.token); 
-        this.updateStateWithUserdId(response);
+        this.updateStateWithUserdId(response); 
+
     } 
     updateStateWithUserdId = (response ) => {
         this.setState({ 
