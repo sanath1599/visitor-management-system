@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const UserModel = require("../models/UserModel");
 const { body,validationResult } = require("express-validator");
 const { sanitizeBody } = require("express-validator");

@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import axios from 'axios'; 
 import { Redirect } from 'react-router-dom';
 
-const SERVER_URL = "http://localhost:3005/api/auth/login" 
+const SERVER_URL = process.env.REACT_APP_DEV_API_URL + "/auth/login";
 const CODE_MAX_VALUE = 9999;
 const CODE_MIN_VALUE = 1000; 
 
