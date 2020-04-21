@@ -1,18 +1,24 @@
 import React, { Component } from 'react'; 
-import { Form, Button, Card, Alert } from 'react-bootstrap'; 
+import { Form, Button, Card, Alert, FormControl } from 'react-bootstrap';  
+import * as Yup from 'yup';
 import axios from 'axios'; 
+import { Redirect } from 'react-router-dom';
 
-const SERVER_URL = process.env.REACT_APP_DEV_API_URL + "/auth/login" 
+const SERVER_URL = process.env.REACT_APP_DEV_API_URL + "/auth/login";
 const CODE_MAX_VALUE = 9999;
 const CODE_MIN_VALUE = 1000; 
-const USERNAME_MIN_LENGTH = 4; 
-const PASSWORD_MIN_LENGTH =  6;
+
+const schema = Yup.object().shape({ 
+    email : Yup.string().email("Enter Proper Email").required("Email is Required"), 
+    password : Yup.string().required("Password is required")
+})
+
 
 export class LoginForm extends Component { 
     constructor(props){ 
         super(props); 
         this.state={ 
-            username:'', 
+            email:'', 
             password:'', 
             resp : null, 
             status : 'rejected', 
@@ -20,12 +26,14 @@ export class LoginForm extends Component {
             isLoggedIn:false, 
             errorOccured : false, 
             validationError :  false, 
-            validationMessage : ''
+            validationMessage : '', 
+            userId : null, 
+            redirect:false
         }
     } 
     onUserNameEntered = (event) =>{ 
         this.setState({ 
-            username:event.target.value
+            email:event.target.value
         })
     } 
     onPasswordEnterd = (event) => { 
@@ -37,49 +45,74 @@ export class LoginForm extends Component {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min)) + min; 
-    } 
-    formValidation = () => {
-        if(this.state.username.length > USERNAME_MIN_LENGTH){ 
-            console.log("Username satisfied");
-            if(this.state.password.length > PASSWORD_MIN_LENGTH){ 
-                console.log("password satisfied"); 
-                this.setState({  
-                    validationError: false,  
-                    validationMessage : ''
+    }  
+
+    formValidation = () => { 
+        
+        schema.isValid({ 
+            email:this.state.email, 
+            password:this.state.password
+        }).then((valid)=>{   
+            if(valid){ 
+                const response = { 
+                    email : this.state.email, 
+                    password : this.state.password, 
+                    code : this.generateSecretCode(), 
+                    status : this.state.status, 
+                } 
+                axios.post(`${SERVER_URL}`,response) 
+                .then(res => this.saveToken(res.data)) 
+                .then(resp=>{console.log(resp); this.setState({ redirect : true })}) //add additional check here based on the response received from the server
+                .catch(err=> {  
+                        if(!err.response)
+                        this.setState({errorOccured:true})  
+                        else 
+                        this.setState({validationError:true, 
+                                        validationMessage: 'Email or Password incorrect'})
+                    
                     })
-                return true;
-            } 
-            else{   
-                this.setState({  
-                    validationError: true,  
-                    validationMessage : 'Username or Password Incorrect'
-                    })
-                    return false; 
+            }else { 
+                this.setState({ 
+                    validationError:true, 
+                    validationMessage:'Enter proper email and password'
+                }) 
             }
-        }else { 
-            this.setState({  
-                validationError: true,  
-                validationMessage : 'Username or Password Incorrect'
-                })
-        return false; 
-        } 
-    }
-    onFormSubmit = () =>{   
-        if(this.formValidation()){ 
-            const response = { 
-                email : this.state.username, 
-                password : this.state.password, 
-                code : this.generateSecretCode(), 
-                status : this.state.status, 
-            } 
-            console.log(response);
-            axios.post(`${SERVER_URL}`,response) 
-            .then(res => this.setState({isLoggedIn:true})) 
-            .catch(err=> this.setState({errorOccured:true}))
-            console.log("Submit clicked");
-        }
+        }).catch((err)=>{ 
+            this.setState({ 
+                validationError:true, 
+                validationMessage:'Enter proper email and password'
+            }) 
+            return false;
+        }) 
+}
+
+    saveToken = (response) => {   
+        console.log(!!response.data.token);
+        localStorage.setItem('token', response.data.token); 
+        this.updateStateWithUserdId(response); 
+
+
     } 
-    render() {
+    updateStateWithUserdId = (response ) => {
+        this.setState({ 
+            userId : response.data._id
+        })
+    }   
+    onFormSubmit = () =>{     
+        console.log("Button Clicked"); 
+        this.formValidation();
+    }
+    render() { 
+            if(this.state.redirect){  
+                return(
+                <Redirect
+                            to={{
+                                pathname: "/dashboard",
+                                state: { userId : this.state.userId }
+                            }}
+                        /> 
+                )
+            }else { 
             if(!this.state.isLoggedIn){  
                 return( 
                     <div> 
@@ -91,10 +124,11 @@ export class LoginForm extends Component {
                                     <Form.Control  
                                         type="email"  
                                         placeholder="Enter email"  
-                                        value = {this.state.username}  
+                                        value = {this.state.email}  
                                         onChange = {(e)=> this.onUserNameEntered(e)}  
-                                    />
-                                </Form.Group>
+                                    /> 
+                                    <FormControl.Feedback type="invalid">Enter Proper Email</FormControl.Feedback>
+                                </Form.Group> 
                                 <Form.Group controlId="formBasicPassword">
                                     <Form.Control  
                                         type="password"  
@@ -128,9 +162,10 @@ export class LoginForm extends Component {
                     Successfully LoggedIn
                 </Alert>
                 )
-            } 
+            }  
+        }
 
-    }
+    } 
 }
 
-export default LoginForm
+export default LoginForm;
