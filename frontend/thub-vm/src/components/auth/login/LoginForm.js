@@ -13,6 +13,7 @@ const schema = Yup.object().shape({
     password : Yup.string().required("Password is required")
 })
 
+
 export class LoginForm extends Component { 
     constructor(props){ 
         super(props); 
@@ -89,6 +90,7 @@ export class LoginForm extends Component {
         console.log(!!response.data.token);
         localStorage.setItem('token', response.data.token); 
         this.updateStateWithUserdId(response); 
+
 
     } 
     updateStateWithUserdId = (response ) => {
