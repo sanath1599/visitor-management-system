@@ -1,4 +1,5 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable no-redeclare */
 /* eslint-disable no-mixed-spaces-and-tabs */
 
 const Visitor = require("../models/VisitorModel");
@@ -298,12 +299,14 @@ exports.visitorUpdate = [
 								);
 							} else {
 								//update Visitor.
-								// Send new visitor email
-								let html = mail_template.visitor_update(foundVisitor.name, foundVisitor.phone, foundVisitor.description,foundVisitor.startup,foundVisitor.startup_email);
-								//   "<img width=400 src='https://upload.wikimedia.org/wikipedia/commons/4/40/T-Hub_Logo-PNG.png' /><br/>Dear " +
-								//   foundVisitor.visitorName +
-								//   "<br/>Your request has been: " +
-								//   req.body.status;
+								
+								if(req.body.status != "Rejected"){
+									var html = mail_template.visitor_update(foundVisitor.name, foundVisitor.phone, foundVisitor.description,foundVisitor.startup,foundVisitor.startup_email);
+								}
+								else {
+									var html = mail_template.visitor_reject(foundVisitor.name, foundVisitor.phone, foundVisitor.description,foundVisitor.startup,foundVisitor.startup_email);
+								}
+								
 								mailer
 									.send(
 										constants.admin.email,
