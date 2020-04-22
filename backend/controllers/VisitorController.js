@@ -1,4 +1,6 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable no-mixed-spaces-and-tabs */
+
 const Visitor = require("../models/VisitorModel");
 const { body, validationResult } = require("express-validator");
 const { sanitizeBody } = require("express-validator");
@@ -8,6 +10,7 @@ var mongoose = require("mongoose");
 mongoose.set("useFindAndModify", false);
 //helpers
 const mailer = require("../helpers/mailer");
+var  Pusher = require("pusher");
 const { constants } = require("../helpers/constants");
 var mail_template = require("../helpers/mailtemplates");
 // Visitor Schema
@@ -21,6 +24,14 @@ function VisitorData(data) {
 	this.createdAt = data.createdAt;
 	this.email = data.email;
 }
+
+var pusher = new Pusher({
+	appId: "986874",
+	key: "8bbef832a5513082ff54",
+	secret: "c2b8d75cdd0f58e7c08a",
+	cluster: "ap2",
+	encrypted: true
+});
 
 /**
  * Visitor List.
@@ -197,7 +208,11 @@ exports.visitorStore = [
 					.send(constants.admin.email, req.body.startup_email, "new request", html2)
 					.then(
 						console.log("Mail sent to visitor")
+						
 					);
+				pusher.trigger("thub-vm", "visitor", {
+					"message": "new visitor"
+					  });
 			}
 		} catch (err) {
 			//throw error in json response with status 500.
@@ -305,6 +320,9 @@ exports.visitorUpdate = [
 												if (err) {
 													return apiResponse.ErrorResponse(res, err);
 												} else {
+													pusher.trigger("thub-vm", "visitor", {
+														"message": "updated visitor"
+													  });
 													// let visitorData = new VisitorData(visitor);
 													return apiResponse.successResponseWithData(
 														res,
@@ -364,6 +382,9 @@ exports.visitorDelete = [
 							if (err) {
 								return apiResponse.ErrorResponse(res, err);
 							} else {
+								pusher.trigger("thub-vm", "visitor", {
+									"message": "delete visitor"
+								  });
 								return apiResponse.successResponse(
 									res,
 									"Visitor delete Success."
