@@ -48,7 +48,7 @@ export default function VisitorRequestForm() {
     }); 
     return (
         <div>
-        <Card style={{ width: "35rem", maxWidth: "600px" }}>
+        <Card style={{ width: "25rem", maxWidth: "600px" }}>
             <Card.Body>
             <Card.Title className="text-center">Visitor Form</Card.Title>
             <Form noValidate  onSubmit={formik.handleSubmit}>

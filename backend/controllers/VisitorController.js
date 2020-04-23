@@ -132,7 +132,7 @@ exports.visitorStore = [
 	body("startup_email", "startup_email must not be empty.")
 		.isLength({ min: 1 })
 		.trim(),
-	body("startup", "startup_email must not be empty.")
+	body("startupName", "startup name must not be empty.")
 		.isLength({ min: 1 })
 		.trim(),	
 	body("email")
@@ -159,10 +159,10 @@ exports.visitorStore = [
 				visitorName: req.body.visitor,
 				time: req.body.time,
 				startup_email: req.body.startup_email,
+				startup: req.body.startupName,
 				description: req.body.description,
 				phone: req.body.phone,
 				email: req.body.email,
-				startup:req.body.startup
 			});
 			console.log("Validated Data");
 			if (!errors.isEmpty()) {
@@ -174,7 +174,7 @@ exports.visitorStore = [
 			} else {
 				//Save Visitor.
 				// Html email body
-				let html = mail_template.new_visitor_mail(req.body.visitor,req.body.phone,req.body.description,req.body.startup,req.body.email,req.body.time);
+				let html = mail_template.new_visitor_mail(req.body.visitor,req.body.phone,req.body.description,req.body.startupName,req.body.email,req.body.time);
 				//   "<img width=400 src='https://upload.wikimedia.org/wikipedia/commons/4/40/T-Hub_Logo-PNG.png' /><br/> <p>You have received a new request from  " +
 				//   req.body.visitor +
 				//   "<br/> phone number: " +
@@ -185,7 +185,7 @@ exports.visitorStore = [
 
 				// Send new visitor email
 				mailer
-					.send(constants.admin.email, req.body.email, "Your Request has been Placed", html)
+					.send(constants.admin.email, req.body.startup_email, "You have received a new request", html)
 					.then(
 						
 						visitor.save(function(err) {
@@ -193,7 +193,16 @@ exports.visitorStore = [
 								return apiResponse.ErrorResponse(res, err);
 							}
 							let visitorData = new VisitorData(visitor);
-
+							let html2 = mail_template.visitor_confirmation(req.body.visitor,req.body.phone,req.body.description,req.body.email,req.body.startupName,req.body.startup_email);
+							mailer
+								.send(constants.admin.email, req.body.email, "Your request has been placed", html2)
+								.then(
+									console.log("Mail sent to visitor")
+						
+								);
+							pusher.trigger("thub-vm", "visitor", {
+								"message": "new visitor"
+					  });
 							return apiResponse.successResponseWithData(
 								res,
 								"Visitor add Success.",
@@ -204,16 +213,7 @@ exports.visitorStore = [
 						
 							
 					);
-				let html2 = mail_template.visitor_confirmation(req.body.visitor,req.body.phone,req.body.description,req.body.email,req.body.startup,req.body.startup_email);
-				mailer
-					.send(constants.admin.email, req.body.startup_email, "new request", html2)
-					.then(
-						console.log("Mail sent to visitor")
-						
-					);
-				pusher.trigger("thub-vm", "visitor", {
-					"message": "new visitor"
-					  });
+				
 			}
 		} catch (err) {
 			//throw error in json response with status 500.
@@ -301,10 +301,10 @@ exports.visitorUpdate = [
 								//update Visitor.
 								
 								if(req.body.status != "Rejected"){
-									var html = mail_template.visitor_update(foundVisitor.name, foundVisitor.phone, foundVisitor.description,foundVisitor.startup,foundVisitor.startup_email);
+									var html = mail_template.visitor_update(foundVisitor.visitorName, foundVisitor.phone, foundVisitor.description,foundVisitor.startup,foundVisitor.startup_email);
 								}
 								else {
-									var html = mail_template.visitor_reject(foundVisitor.name, foundVisitor.phone, foundVisitor.description,foundVisitor.startup,foundVisitor.startup_email);
+									var html = mail_template.visitor_reject(foundVisitor.visitorName, foundVisitor.phone, foundVisitor.description,foundVisitor.startup,foundVisitor.startup_email);
 								}
 								
 								mailer

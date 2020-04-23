@@ -33,7 +33,9 @@ var pusher = new Pusher('8bbef832a5513082ff54', {
 
 var channel = pusher.subscribe('thub-vm');
 channel.bind('visitor', function(data) {
+  if(window.location.pathname=='/dashboard'){  
   location.reload();
+  }
 });
 </script>
     <!--

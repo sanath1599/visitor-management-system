@@ -33,7 +33,7 @@ const DashboardChild = ({ visitors }) => {
        
       <div className="row card-body">
            {visitors.map((visitor, i ) => ( 
-          <div className="col-xs-12 col-sm-6 col-md-6">
+          <div className="col-xs-12 col-sm-6 col-md-6 col-lg-4">
         <Card border={visitor.status === "Rejected" ?  "danger" : "success" }   style={{ width: "20rem", margin : "1rem" }}>
           <Card.Header>{visitor.status}</Card.Header>
           <Card.Body>
